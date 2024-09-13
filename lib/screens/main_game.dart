@@ -14,6 +14,9 @@ import 'package:chess/values/globals.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+bool blackKingMoved = false;
+bool whiteKingMoved = false;
+
 class GameBoard extends StatefulWidget {
   const GameBoard({super.key});
 
@@ -35,8 +38,6 @@ class _GameBoardState extends State<GameBoard> {
   bool isBlackKingInCheck = false;
   bool isWhiteTurn = true;
   bool isGameStarted = false;
-  bool blackKingMoved = false;
-  bool whiteKingMoved = false;
 
   ChessPiece? selectedPiece;
 
@@ -564,10 +565,21 @@ class _GameBoardState extends State<GameBoard> {
   }
 
   bool performCastling(
-      int rank, int rookFromCol, int rookToCol, int kingRow, int kingCol) {
+    int rank,
+    int rookFromCol,
+    int rookToCol,
+    int kingRow,
+    int kingCol,
+  ) {
     // Move king
     board[kingRow][kingCol] = selectedPiece;
     board[selectedCord[0]][selectedCord[1]] = null;
+
+    if (selectedPiece!.isWhite) {
+      whiteKingMoved = true;
+    } else {
+      blackKingMoved = true;
+    }
 
     // Move rook
     board[rank][rookToCol] = board[rank][rookFromCol];
@@ -576,7 +588,7 @@ class _GameBoardState extends State<GameBoard> {
     return true;
   }
 
-  // bool castelMove(int row, int col) {
+  // void castelMove(int row, int col) {
   //   /*
   //     king not moved
   //     nothing between king and rook
@@ -598,8 +610,6 @@ class _GameBoardState extends State<GameBoard> {
   //       // move rook
   //       board[7][2] = board[7][0];
   //       board[7][0] = null;
-
-  //       return true;
   //     }
   //     if (board[7][4] == null &&
   //         board[7][5] == null &&
@@ -612,7 +622,6 @@ class _GameBoardState extends State<GameBoard> {
   //       // move rook
   //       board[7][4] = board[7][7];
   //       board[7][7] = null;
-  //       return true;
   //     }
   //   } else if (!isWhiteTurn && !blackKingMoved) {
   //     if (board[0][1] == null &&
@@ -626,7 +635,6 @@ class _GameBoardState extends State<GameBoard> {
   //       // move rook
   //       board[0][3] = board[0][0];
   //       board[0][0] = null;
-  //       return true;
   //     }
   //     if (board[0][5] == null && board[0][6] == null && row == 0 && col == 6) {
   //       // move king
@@ -635,10 +643,8 @@ class _GameBoardState extends State<GameBoard> {
   //       // move rook
   //       board[0][5] = board[0][7];
   //       board[0][7] = null;
-  //       return true;
   //     }
   //   }
-  //   return false;
   // }
 
   void onTileTap(List<int> tileCoordinates) {
@@ -690,6 +696,9 @@ class _GameBoardState extends State<GameBoard> {
       } else if (selectedPiece != null && isValidMove(row, col)) {
         // Move the piece
         playSound('sounds/move.mp3');
+        if (selectedPiece!.type == ChessPieceType.king) {
+          castelMove(row, col);
+        }
         updateMovedPiece(row, col);
       } else {
         removeSelectedPiece();

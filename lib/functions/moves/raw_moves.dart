@@ -1,5 +1,6 @@
 import 'package:chess/components/piece.dart';
 import 'package:chess/functions/helpers.dart';
+import 'package:chess/screens/main_game.dart';
 
 List<List<int>> getRawMoves(
   List<List<ChessPiece?>> board,
@@ -193,6 +194,23 @@ List<List<int>> getRawMoves(
 
         rawMoves.add([newRow, newCol]);
       }
+
+      if (selectedPiece!.isWhite && !whiteKingMoved) {
+        if (board[7][1] == null && board[7][2] == null) {
+          rawMoves.add([7, 1]);
+        }
+        if (board[7][4] == null && board[7][5] == null && board[7][6] == null) {
+          rawMoves.add([7, 5]);
+        }
+      } else if (!selectedPiece.isWhite && !blackKingMoved) {
+        if (board[0][1] == null && board[0][2] == null && board[0][3] == null) {
+          rawMoves.add([0, 2]);
+        }
+        if (board[0][5] == null && board[0][6] == null) {
+          rawMoves.add([0, 6]);
+        }
+      }
+
       break;
   }
   return rawMoves;
