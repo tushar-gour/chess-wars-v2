@@ -350,38 +350,42 @@ class _GameBoardState extends State<GameBoard> {
         ),
         child: AlertDialog(
           backgroundColor: dialogueColor,
-          content: Column(
-            children: [
-              Text(
-                'Tap on a piece to revive:',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: "Changa",
-                  fontSize: 20,
-                ),
-              ),
-              SizedBox(height: 20),
-              SizedBox(
-                width: 300,
-                height: 100,
-                child: GridView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
-                  ),
-                  itemCount: deadPieces.length,
-                  itemBuilder: (ctx, index) => DeadPiece(
-                    imagePath: deadPieces[index].imagePath,
-                    isWhite: deadPieces[index].isWhite,
-                    canFlip: false,
-                    onTap: () {
-                      Navigator.pop(context);
-                      onRevive(row, col, deadPieces[index]);
-                    },
+          content: SizedBox(
+            height: 400,
+            child: Column(
+              children: [
+                Text(
+                  'Tap on a piece to revive:',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: "Changa",
+                    fontSize: 20,
                   ),
                 ),
-              ),
-            ],
+                SizedBox(height: 20),
+                SizedBox(
+                  width: 300,
+                  height: 100,
+                  child: GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4,
+                    ),
+                    itemCount: deadPieces.length,
+                    itemBuilder: (ctx, index) => DeadPiece(
+                      imagePath: deadPieces[index].imagePath,
+                      isWhite: deadPieces[index].isWhite,
+                      canFlip: false,
+                      onTap: () {
+                        Navigator.pop(context);
+                        onRevive(row, col, deadPieces[index]);
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
